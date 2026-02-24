@@ -1,1 +1,0 @@
-tokens = {"main": '8186343979:AAFMghLrH2fQcyj-ic_GtZX0vNk9m7lDQ_o', "test": '7155761835:AAGQrlBJL25xWVB0BuwxeKD5yDR58KJTrlo'}
