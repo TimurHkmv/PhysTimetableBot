@@ -3,10 +3,12 @@ import telebot
 from telebot import types
 import datetime
 import GSparse
+from flask import Flask, request
 
 token = '7027691302:AAFPHN1OqPISHiRblAQNMy1NnI65qOGvJWs'
 gsURL = 'https://docs.google.com/spreadsheets/d/1LePcTz8SUSEnyeqBwbMcUAK6vWGt5K0OD-9TN4kXvLw'
 bot = telebot.TeleBot(token)
+app = Flask(__name__)
 admin_id = 641336894
 availableGroups = ['1', '2', '3', '4', '5', '6', '7']
 dayButtons = ['Сегодня', 'Завтра', 'Понедельник',
@@ -93,4 +95,15 @@ def func(message):
                              message.from_user))
 
 
-bot.polling(non_stop=True, interval=0)  # запуск бота
+@app.route(f"/{token}", methods=['POST'])
+def webhook():
+    json_str = request.get_data().decode('utf-8')
+    update = telebot.types.Update.de_json(json_str)
+    bot.process_new_updates([update])
+    return "OK", 200
+
+
+if __name__ == "__main__":
+    bot.remove_webhook()
+    bot.set_webhook(url=f"https://phystimetablebot-production.up.railway.app/{token}")
+    app.run(host="0.0.0.0", port=5000)
