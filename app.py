@@ -4,7 +4,6 @@ from telebot import types
 import datetime
 import GSparse
 
-# тестовый бот - test, основной бот - main
 token = '7027691302:AAFPHN1OqPISHiRblAQNMy1NnI65qOGvJWs'
 gsURL = 'https://docs.google.com/spreadsheets/d/1LePcTz8SUSEnyeqBwbMcUAK6vWGt5K0OD-9TN4kXvLw'
 bot = telebot.TeleBot(token)
@@ -13,19 +12,21 @@ availableGroups = ['1', '2', '3', '4', '5', '6', '7']
 dayButtons = ['Сегодня', 'Завтра', 'Понедельник',
               'Вторник', 'Среда', 'Четверг',
               'Пятница', 'Суббота', 'Сменить группу']
-global groupNumber
+users = {}
+file = open('users', 'r')
+for line in file:
+    user, number = line.split(':')
+    number = number[0]
+    users[int(user)] = number
 
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    # for i in range(1,8):
-    #     markup.add(types.KeyboardButton(str(i)))
     markup.add(*availableGroups)
     bot.send_message(message.chat.id,
                      text="Укажи номер группы (1-7)".format(
                          message.from_user), reply_markup=markup)
-
 
 def chooseDay(message, group):
     bot.send_message(message.chat.id, text="Группа изменена на " + str(group) + "!")
@@ -38,13 +39,24 @@ def chooseDay(message, group):
 
 @bot.message_handler(content_types=['text'])
 def func(message):
-    global groupNumber
-    gettedMessage = re.match(r"(\d+)", message.text)
-    if gettedMessage and gettedMessage.group(1) in availableGroups:
-        gettedMessage = gettedMessage.group(1)
-        groupNumber = gettedMessage
-        chooseDay(message, gettedMessage)
+    # Select group number
+    groupNumberMatch = re.match(r"(\d+)", message.text)
+    if groupNumberMatch and groupNumberMatch.group(1) in availableGroups:
+        groupNumberMatch = groupNumberMatch.group(1)
+        if message.chat.id in users:
+            users[message.chat.id] = groupNumberMatch
+            fileC = open("users", "w")
+            for key, value in users.items():
+                fileC.write(f'{key}:{value}\n')
+        else:
+            users[message.chat.id] = groupNumberMatch
+            fileA = open("users", 'a')
+            fileA.write(f'{message.chat.id}:{groupNumberMatch}\n')
+        chooseDay(message, groupNumberMatch)
     # Buttons from dayButtons list
+    elif message.chat.id not in users:
+        start_message(message)
+        return
     elif message.text in dayButtons:
         # Today button
         if message.text == dayButtons[0]:
@@ -71,7 +83,7 @@ def func(message):
         day = day.upper()
         cells = GSparse.GetGS(gsURL)
         rowIndexes, groupIndexes = GSparse.getTimetableIndexes(cells)
-        myTimetable = GSparse.getMyTimetable(rowIndexes[day], groupIndexes[groupNumber], cells)
+        myTimetable = GSparse.getMyTimetable(rowIndexes[day], groupIndexes[users[message.chat.id]], cells)
         bot.send_message(message.chat.id, text=myTimetable)
     # Wrong button (message)
     else:
