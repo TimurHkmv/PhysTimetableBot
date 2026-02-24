@@ -5,23 +5,16 @@ import datetime
 import csv
 import io
 import urllib.request
-import git
-
 
 # тестовый бот - test, основной бот - main
-token = '8186343979:AAFMghLrH2fQcyj-ic_GtZX0vNk9m7lDQ_o'
+token = '7027691302:AAFPHN1OqPISHiRblAQNMy1NnI65qOGvJWs'
 bot = telebot.TeleBot(token)
 
 admin_id = 641336894
 fortochka = 'Форточка 🕺'
-
 def getSubject(day, para, group):
     # адрес таблицы (без листа)
-    url = 'https://docs.google.com/spreadsheets/d/1mzweiyFR-_rer_T812R74phF-BqbH-ygkdhNRsNtTCU/export?format=csv'
-    # добавление к адресу номер листа
-    if git.gitstr != '':
-        url += git.gitstr
-
+    url = 'https://docs.google.com/spreadsheets/d/1LePcTz8SUSEnyeqBwbMcUAK6vWGt5K0OD-9TN4kXvLw/export?format=csv'
     # получаем всю таблицу в лист rows
     rows = []
     response = urllib.request.urlopen(url)
@@ -74,7 +67,6 @@ def getSubject(day, para, group):
     if subject == '':
         is_cell_empty = True
         subjectOtherGroup = rows[input_para_key][groups[3]]
-        #print("!!!!: ", subjectOtherGroup)
         if subjectOtherGroup == '':
             subjectPI = rows[input_para_key][3]
             buffer = subjectPI.split('\n')
