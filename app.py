@@ -100,8 +100,12 @@ def func(message):
 
 @app.route(f"/{token}", methods=['POST'])
 def webhook():
-    update = telebot.types.Update.de_json(request.data.decode("utf-8"))
-    bot.process_new_updates([update])
+    try:
+        update = telebot.types.Update.de_json(request.data.decode("utf-8"))
+        bot.process_new_updates([update])
+    except Exception as e:
+        print("WEBHOOK ERROR:", e)
+        return "ERROR", 500
     return "OK", 200
 
 
