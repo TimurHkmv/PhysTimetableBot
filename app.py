@@ -70,7 +70,7 @@ def func(message):
             if dayNumber == 6:
                 return
             else:
-                day = dayButtons[dayNumber + 1]
+                day = dayButtons[dayNumber + 2]
         # Tomorrow button
         elif message.text == dayButtons[1]:
             dayNumber = datetime.datetime.now().weekday() + 1
@@ -78,7 +78,7 @@ def func(message):
                 bot.send_message(message.chat.id, text='Сегодня воскресенье!')
                 return
             else:
-                day = dayButtons[dayNumber + 1]
+                day = dayButtons[dayNumber + 2]
         # Change group button
         elif message.text == dayButtons[8]:
             start_message(message)
