@@ -10,7 +10,8 @@ gsURL = 'https://docs.google.com/spreadsheets/d/1LePcTz8SUSEnyeqBwbMcUAK6vWGt5K0
 bot = telebot.TeleBot(token)
 app = Flask(__name__)
 admin_id = 641336894
-availableGroups = ['1', '2', '3', '4', '5', '6', '7']
+availableGroups = ['1', '2', '3',
+                   '4', '5', '6', '7']
 dayButtons = ['Сегодня', 'Завтра', 'Понедельник',
               'Вторник', 'Среда', 'Четверг',
               'Пятница', 'Суббота', 'Сменить группу']
