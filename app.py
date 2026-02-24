@@ -1,3 +1,4 @@
+import os
 import re
 import telebot
 from telebot import types
@@ -98,13 +99,13 @@ def func(message):
 
 @app.route(f"/{token}", methods=['POST'])
 def webhook():
-    json_str = request.get_data().decode('utf-8')
-    update = telebot.types.Update.de_json(json_str)
+    update = telebot.types.Update.de_json(request.data.decode("utf-8"))
     bot.process_new_updates([update])
     return "OK", 200
 
 
 if __name__ == "__main__":
     bot.remove_webhook()
-    bot.set_webhook(url=f"https://phystimetablebot-production.up.railway.app/{token}")
-    app.run(host="0.0.0.0", port=5000)
+    bot.set_webhook(url=f"https://phystimetablebot-production-ccee.up.railway.app/{token}")
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
