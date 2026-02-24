@@ -32,7 +32,6 @@ def getTimetableIndexes(rows):
             break
 
     groupColumnIndexes = {}
-    print(rows[startRowInd])
     for columnInd in range(len(rows[startRowInd])):
         groupNumber = re.match(r"Группа (\d+)", rows[startRowInd][columnInd])
         if groupNumber:
@@ -40,7 +39,6 @@ def getTimetableIndexes(rows):
 
     dayRowIndexes = {}
     begin = startRowInd + 3
-    end = 0
     day = rows[begin][0]
     for rowInd in range(begin, len(rows)):
         if rows[rowInd][0] != '':
@@ -61,7 +59,7 @@ def getMyTimetable(rowIndexes, groupIndex, rows):
     :param rowIndexes: list of row indices for the row in the day
     :param groupIndex: index of the column for the group
     :param rows: list of cells from Google sheet
-    :return: one string with the timetable for the Nth group's day'
+    :return: one string with the timetable for the Nth group's day
     """
     """
     День недели rows[rowIndexes[0]][0]
