@@ -28,6 +28,7 @@ def start_message(message):
                      text="Укажи номер группы (1-7)".format(
                          message.from_user), reply_markup=markup)
 
+
 def chooseDay(message, group):
     bot.send_message(message.chat.id, text="Группа изменена на " + str(group) + "!")
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
