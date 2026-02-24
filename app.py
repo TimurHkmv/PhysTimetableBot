@@ -98,7 +98,7 @@ def func(message):
                              message.from_user))
 
 
-@app.route(f"/{token}", methods=['POST'])
+@app.route(f"/{token}", methods=['GET', 'POST'])
 def webhook():
     try:
         update = telebot.types.Update.de_json(request.data.decode("utf-8"))
